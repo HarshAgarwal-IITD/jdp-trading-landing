@@ -15,9 +15,13 @@ jobs:
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          printf "%s\n" "${{ secrets.SSH_PRIVATE }}" > ~/.ssh/demo.pem
+          echo "${{ secrets.SSH_PRIVATE_B64 }}" | base64 --decode > ~/.ssh/demo.pem
           chmod 600 ~/.ssh/demo.pem
           ssh-keyscan -H ec2-13-53-197-0.eu-north-1.compute.amazonaws.com >> ~/.ssh/known_hosts
+
+      - name: Verify SSH key
+        run: |
+          ssh-keygen -l -f ~/.ssh/demo.pem
 
       - name: Deploy to EC2
         run: |
