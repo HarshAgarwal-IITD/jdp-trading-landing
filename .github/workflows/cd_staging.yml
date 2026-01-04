@@ -8,16 +8,14 @@ on:
 jobs:
   redeploy-to-staging:
     runs-on: ubuntu-latest
-    name: Deploying everything to staging
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup SSH key
+      - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE }}" > ~/.ssh/demo.pem
+          printf "%s\n" "${{ secrets.SSH_PRIVATE }}" > ~/.ssh/demo.pem
           chmod 600 ~/.ssh/demo.pem
           ssh-keyscan -H ec2-13-53-197-0.eu-north-1.compute.amazonaws.com >> ~/.ssh/known_hosts
 
