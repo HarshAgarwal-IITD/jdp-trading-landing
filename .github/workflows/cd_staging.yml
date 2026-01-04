@@ -16,7 +16,7 @@ jobs:
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE }}
           script: |
-            cd ~/YOUR_REPO
+            cd ~/jdp-trading-landing
             git pull origin main
             npm install
             npm run build
