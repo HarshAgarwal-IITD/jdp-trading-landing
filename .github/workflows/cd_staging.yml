@@ -3,14 +3,16 @@ name: Deploy to Staging
 on:
   push:
     branches:
-      -"main"
+      - "main"
 
 jobs: 
+ 
   Redeploy to Staging:
+    runs-on: ubuntu-latest
     name: Deploying everthing to staging
     steps:
-      - name: SSH into staging server
-      - run : 
+      name: SSH into staging server
+      run : |
           echo ${{ secrets.SSH_PRIVATE }} &> ~/.ssh/demo.pem
           ssh -i ~/.ssh/demo.pem ec2-user@ec2-13-53-197-0.eu-north-1.compute.amazonaws.com
           cd jdp-trading-landing
