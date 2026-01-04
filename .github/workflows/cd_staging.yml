@@ -11,7 +11,7 @@ jobs:
     name: Deploying everthing to staging
     steps:
       - run : |
-          echo "${{ secrets.SSH_PRIVATE }}" &> ~/.ssh/demo.pem
+          echo "${{ secrets.SSH_PRIVATE }}" &> ~/ssh
           ssh -i ~/.ssh/demo.pem ec2-user@ec2-13-53-197-0.eu-north-1.compute.amazonaws.com
           cd jdp-trading-landing
           git pull origin 
