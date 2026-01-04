@@ -1,0 +1,32 @@
+name: Deploy to Staging
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  deploy:
+    name: Deploying everything to staging
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH and deploy
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/demo.pem
+          chmod 600 ~/.ssh/demo.pem
+          ssh-keyscan -H ec2-13-53-197-0.eu-north-1.compute.amazonaws.com >> ~/.ssh/known_hosts
+          ssh -i ~/.ssh/demo.pem -o StrictHostKeyChecking=no ec2-user@ec2-13-53-197-0.eu-north-1.compute.amazonaws.com << 'EOF'
+            cd jdp-trading-landing
+            git pull origin main
+            npm i
+            npm run build
+            pm2 restart trading
+          EOF
+
+
