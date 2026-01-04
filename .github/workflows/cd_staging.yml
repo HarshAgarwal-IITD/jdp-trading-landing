@@ -1,9 +1,8 @@
-name: Deploy to EC2 (Git Pull)
+name: Deploy to EC2
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   deploy:
@@ -11,14 +10,14 @@ jobs:
 
     steps:
       - name: Deploy via SSH
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE }}
           script: |
-            cd ~/jdp-trading-landing
+            cd ~/YOUR_REPO
             git pull origin main
             npm install
             npm run build
-            pm2 restart trading
+            pm2 restart app
