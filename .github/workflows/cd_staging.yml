@@ -6,13 +6,11 @@ on:
       - "main"
 
 jobs: 
- 
-  Redeploy to Staging:
+  redeploy-to-staging:
     runs-on: ubuntu-latest
     name: Deploying everthing to staging
     steps:
-      name: SSH into staging server
-      run : |
+      - run : |
           echo ${{ secrets.SSH_PRIVATE }} &> ~/.ssh/demo.pem
           ssh -i ~/.ssh/demo.pem ec2-user@ec2-13-53-197-0.eu-north-1.compute.amazonaws.com
           cd jdp-trading-landing
