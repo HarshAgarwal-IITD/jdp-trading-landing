@@ -8,35 +8,15 @@ on:
 jobs: 
   redeploy-to-staging:
     runs-on: ubuntu-latest
-    name: Deploying everything to staging
+    name: Deploying everthing to staging
     steps:
-      - name: Setup SSH
-        run: |
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          # Write SSH key - ensure it's written exactly as stored in secret
-          echo "${{ secrets.SSH_PRIVATE }}" > ~/.ssh/demo.pem
-          # Remove any trailing whitespace/newlines that might cause issues
-          sed -i 's/[[:space:]]*$//' ~/.ssh/demo.pem
-          chmod 600 ~/.ssh/demo.pem
-          # Verify key format (should start with -----BEGIN)
-          echo "Key first line:"
-          head -1 ~/.ssh/demo.pem
-          echo "Key last line:"
-          tail -1 ~/.ssh/demo.pem
-          ssh-keyscan -H ec2-13-53-197-0.eu-north-1.compute.amazonaws.com >> ~/.ssh/known_hosts
-      
-      - name: Deploy to staging
-        run: |
-          ssh -i ~/.ssh/demo.pem \
-            -o StrictHostKeyChecking=no \
-            -o UserKnownHostsFile=~/.ssh/known_hosts \
-            ec2-user@ec2-13-53-197-0.eu-north-1.compute.amazonaws.com << 'EOF'
-            cd jdp-trading-landing
-            git pull origin main
-            npm i
-            npm run build
-            pm2 restart trading
-          EOF
+      - run : |
+          echo "${{ secrets.SSH_PRIVATE }}" &> ~/.ssh/demo.pem
+          ssh -i ~/.ssh/demo.pem ec2-user@ec2-13-53-197-0.eu-north-1.compute.amazonaws.com
+          cd jdp-trading-landing
+          git pull origin 
+          npm i
+          npm run build
+          pm2 restart trading 
 
 
